@@ -3,33 +3,47 @@ name: Playwright Tests
 on:
   push:
     branches: [main]
+
   pull_request:
     branches: [main]
+
+  # Run automatically every day
+  # 15:00 UTC = 10:00 AM Central during CDT
   schedule:
     - cron: '0 15 * * *'
+
+  # Allows you to run the workflow manually from GitHub
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
+
+      # Get project code from GitHub repository
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      # Install Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # Install project dependencies
       - name: Install Dependencies
         run: npm ci
 
+      # Install Chromium browser
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
+      # Run Playwright tests
       - name: Run Playwright Tests
         run: npx playwright test --project=chromium
 
+      # Save Playwright HTML report in GitHub
       - name: Upload Playwright Report
         if: always()
         uses: actions/upload-artifact@v4
@@ -37,3 +51,31 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+
+      # Zip the Playwright report for email
+      - name: Zip Playwright Report
+        if: always()
+        run: zip -r playwright-report.zip playwright-report/
+
+      # Send report to email
+      - name: Send Test Report Email
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: Playwright Automation Test Report
+          to: ${{ secrets.EMAIL_USERNAME }}
+          from: Playwright Automation
+          body: |
+            Hi,
+
+            The Playwright automation test execution has completed.
+
+            Please find the Playwright HTML report attached.
+
+            Thank you.
+          attachments: playwright-report.zip
