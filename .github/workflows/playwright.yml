@@ -10,8 +10,7 @@ on:
   # Run automatically every day
   # 15:00 UTC = 10:00 AM Central during CDT
   schedule:
-    - cron: '25 10 * * *'
-      timezone: "America/Chicago"
+   - cron: '*/5 * * * *'
   # Allows you to run the workflow manually from GitHub
   workflow_dispatch:
 
