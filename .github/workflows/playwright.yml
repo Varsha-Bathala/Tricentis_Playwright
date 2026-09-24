@@ -10,8 +10,8 @@ on:
   # Run automatically every day
   # 15:00 UTC = 10:00 AM Central during CDT
   schedule:
-    - cron: '0 15 * * *'
-
+    - cron: '25 10 * * *'
+      timezone: "America/Chicago"
   # Allows you to run the workflow manually from GitHub
   workflow_dispatch:
 
@@ -51,7 +51,6 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
-
       # Zip the Playwright report for email
       - name: Zip Playwright Report
         if: always()
