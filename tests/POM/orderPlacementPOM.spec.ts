@@ -17,14 +17,14 @@ test('Complete Order Placement', async ({ page }) => {
   await loginPage.goto();
 
   await loginPage.login(
-    'jenniferd123@example.com',
+    'jennifer123@example.com',
     'Test@1234'
   );
 
   // Verify login
   await expect(
     page.getByText(
-      'jenniferd123@example.com',
+      'jennifer123@example.com',
       { exact: true }
     )
   ).toBeVisible();
@@ -84,5 +84,4 @@ test('Complete Order Placement', async ({ page }) => {
       { exact: true }
     )
   ).toBeVisible();
-
 });

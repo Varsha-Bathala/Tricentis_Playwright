@@ -27,7 +27,7 @@ test('Proceed to Checkout', async ({ page }) => {
 
   // Open Shopping Cart
   await cartPage.openCart();
-
+  
   // Proceed to checkout
   await checkoutPage.proceedToCheckout();
 
